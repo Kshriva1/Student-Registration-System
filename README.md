@@ -1,2 +1,2 @@
-# CS532-Student-Registration-System Project
+# Student-Registration-System Project
 CS532 Database Systems
