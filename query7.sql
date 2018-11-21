@@ -1,19 +1,20 @@
 set serveroutput on;
 create or replace procedure del_student(
-	delB# IN Students.B#%type) IS
+        delB# IN Students.B#%type,error_message out varchar2) IS
 
-	--local
-	tempB# Students.B#%type;
+        --local
+        count_B# Students.B#%type;
 
 BEGIN
-	SELECT B#
-	INTO tempB# FROM Students WHERE B# = delB#;
-	DELETE Students WHERE B# = delB#;	
+        SELECT COUNT(*) into count_B# FROM Students Where B# = delB#;
 
-EXCEPTION WHEN NO_DATA_FOUND THEN
-	IF tempB# is null THEN
-		DBMS_output.put_line('The B# is invalid');
-	END IF;
+
+        IF (count_B# = 0) THEN
+                error_message := 'The B# is invalid';
+        ELSE
+                DELETE Students WHERE B# = delB#;
+        END IF;
 END;
 /
-show errors; 
+show errors;
+
