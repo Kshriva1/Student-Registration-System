@@ -15,22 +15,23 @@ create or replace procedure drop_student(
 	numClasses Number;
 
 BEGIN
-	SELECT B#
-	INTO tempB# FROM Students WHERE B# = dropB#;
-	SELECT Classid
-	INTO tempClassid FROM Classes WHERE Classid = dropClassid;
-	SELECT B#
-	INTO tempEnrollment FROM Enrollments WHERE B# = dropB# and Classid = dropClassid;
-  IF tempB# is null THEN
+  SELECT count(*)
+  INTO count_B# FROM Students WHERE B# = dropB#;
+  SELECT count(*)
+  INTO count_Classid FROM Classes WHERE Classid = dropClassid;
+  SELECT count(*)
+  INTO count_Enrollment FROM Enrollments WHERE B# = dropB# and Classid = dropClassid;
+  IF (count_B# = 0) THEN
     error_message := 'The B# is invalid';
-  ELSIF tempClassid is null THEN
+  ELSIF (count_Classid = 0) THEN
     error_message := 'The classid is invalid';
-  ELSIF tempEnrollment is null THEN
+  ELSIF (count_Enrollment = 0) THEN
     error_message := 'The student is not enrolled in the class';
-  END IF;
-	SELECT SEMESTER, YEAR
-	INTO tempSemester, tempYear FROM CLASSES WHERE Classid = dropClassid;
-	IF tempSemester != 'Fall' or tempYear != 2018 THEN
+  ELSE
+
+	 SELECT SEMESTER, YEAR
+	 INTO tempSemester, tempYear FROM CLASSES WHERE Classid = dropClassid;
+	 IF tempSemester != 'Fall' or tempYear != 2018 THEN
 		error_message := 'Only enrollment in the current semester can be dropped.';
 		RETURN;
 	END IF;
@@ -58,6 +59,7 @@ BEGIN
 	IF numClasses = 0 THEN
 		error_message := 'This student is not enrolled in any classes';
 	END IF;
+END IF;
 END;
 /
 show errors;
