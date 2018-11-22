@@ -46,7 +46,7 @@ END;
 
 /* enrollments table */
 
-create or replace procedure get_enrollments(student_cursor out
+create or replace procedure show_enrollments(student_cursor out
 sys_refcursor)
 AS
 BEGIN
@@ -58,7 +58,7 @@ END;
 
 /* prerequisites table */
 
-create or replace procedure get_prerequisites(student_cursor out
+create or replace procedure show_prerequisites(student_cursor out
 sys_refcursor) AS
 BEGIN
         open student_cursor for
@@ -70,7 +70,7 @@ END;
 
 /* logs table */
 
-create or replace procedure get_logs(student_cursor out sys_refcursor)
+create or replace procedure show_logs(student_cursor out sys_refcursor)
 AS
 BEGIN
         open student_cursor for
