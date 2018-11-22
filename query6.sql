@@ -3,9 +3,9 @@ create or replace procedure drop_student(
 	dropClassid in Classes.Classid%type,error_message out varchar2) IS
 
 	--Local declarations
-	tempB# Students.B#%type;
-	tempClassid Classes.Classid%type;
-	tempEnrollment Enrollments.B#%type;
+	count_B# Students.B#%type;
+	count_Classid Classes.Classid%type;
+	count_Enrollment Enrollments.B#%type;
 	tempSemester Classes.Semester%type;
 	tempYear Classes.Year%type;
 	dCode Classes.DEPT_CODE%type;
