@@ -23,16 +23,16 @@ public class Driver {
       while(true)
       {
 
-				System.out.println();
-				System.out.println("*****Main Menu*****");
+                                System.out.println();
+                                System.out.println("*****Main Menu*****");
 
-				System.out.println("1.View Table data");
-				System.out.println("2.View TA Information");
-				System.out.println("3.View Prerequisites Information");
-				System.out.println("4.Enroll a Student in Class");
-				System.out.println("5.Drop a Student from Class");
-				System.out.println("6.Delete a Student:");
-				System.out.println("7.Exit");
+                                System.out.println("1.View Table data");
+                                System.out.println("2.View TA Information");
+                                System.out.println("3.View Prerequisites Information");
+                                System.out.println("4.Enroll a Student in Class");
+                                System.out.println("5.Drop a Student from Class");
+                                System.out.println("6.Delete a Student:");
+                                System.out.println("7.Exit");
         int n = 0;
         Scanner sc = new Scanner(System.in);
         System.out.println("Please select an option from the above : ");
@@ -41,48 +41,51 @@ public class Driver {
         switch(n)
         {
 
-
+    /*
           case 1:
           {
-             showTableInfo(m,conn);
-			       break;
-		      }
+                  showTableInfo(m,conn);
+                  break;
+          }
 
           case 2:
           {
-        	  infoTA(conn);
-        	  break;
+                  infoTA(conn);
+                  break;
           }
 
           case 3:
           {
-        	  infoPrerequisites(conn);
-        	  break;
+                  infoPrerequisites(conn);
+                  break;
           }
 
           case 4:
           {
-        	  enrollStudentClass(conn);
-        	  break;
+                  enrollStudentClass(conn);
+                  break;
           }
 
           case 5:
           {
-        	  dropStudentClass(conn);
-        	  break;
+                  dropStudentClass(conn);
+                  break;
           }
+
+    */
 
           case 6:
           {
-        	  deleteStudent(conn);
-        	  break;
+                  deleteStudent(conn);
+                  break;
           }
 
           case 7:
           {
-        	  System.exit(1);;
-        	  break;
-          }
+                  System.exit(1);;
+                  break;
+
+           }
 
         }
 
@@ -92,38 +95,47 @@ public class Driver {
     }
 
     catch (Exception e) {
-    	System.out.println("Connection not Established. Try Again");
-    	System.exit(1);
+        System.out.println("Connection not Established. Try Again");
+        System.exit(1);
     }
 
 
   }
 
   public static void deleteStudent(Connection conn) {
-		try
-		{
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			System.out.println("Student Bno: ");
-			String Bno = br.readLine();
-			CallableStatement stmt = conn.prepareCall("BEGIN student_registration.del_student(?,?); END;");
-			stmt.setString(1,Bno);
-			stmt.registerOutParameter(2, java.sql.Types.VARCHAR);
-			stmt.execute();
-			String err_msg = ((OracleCallableStatement)stmt).getString(2);
-		      if(err_msg == null){
-		    	  System.out.println("\nStudent deleted successfully.");
-		      }
-		      else{
+                try
+                {
+                        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                        System.out.println("Student Bno: ");
+                        String Bno = br.readLine();
+                        CallableStatement stmt = conn.prepareCall("BEGIN student_registration.del_student(?,?); END;");
+                        stmt.setString(1,Bno);
+                        stmt.registerOutParameter(2, java.sql.Types.VARCHAR);
+                        stmt.execute();
+                        String err_msg = ((OracleCallableStatement)stmt).getString(2);
+                      if(err_msg == null){
+
+			        System.out.println("\nStudent deleted successfully.");
+                      }
+                      else{
                    System.out.println(err_msg);
 
-		      }
+                      }
 
 
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			System.exit(1);
-		}
-	}
+                }
+                catch (Exception e)
+                {
+                        e.printStackTrace();
+                        System.exit(1);
+                }
+        }
 }
+
+			      
+			      
+			      
+			      
+			      
+			      
+			      
