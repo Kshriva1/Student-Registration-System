@@ -53,24 +53,23 @@ public class Driver {
 						+ "4.Classes\n"
 						+ "5.Enrollments\n"
 						+ "6.Prerequisites\n"
-            + "7.Logs\n");
+				                + "7.Logs\n");
             int m = 0;
-            try
-		        {
-			         BufferedReader input_reader = new BufferedReader(new InputStreamReader(System.in));
+            try {
+			      BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
 			      do
 			      {
-				       System.out.println("Enter Choice");
-				       m = Integer.parseInt(input_reader.readLine());
+				       System.out.println("Enter Choice From Above Options");
+				       m = Integer.parseInt(inputReader.readLine());
 			      }while(m < 1 || m > 7);
-		    }
-		       catch (Exception e) {
-			      System.out.println("getChoice Exception");
-			      System.exit(1);
-          }
-            showTableInfo(m,conn);
-			      break;
-		      }
+	        }
+	        catch (Exception e) {
+		      System.out.println("Choice Exception: "+e.toString());
+		      System.exit(1);
+                }
+                showTableInfo(m,conn);
+		      break;
+	  }
 
           case 2:
           {
@@ -108,10 +107,18 @@ public class Driver {
         	  break;
           }
 
+
+
         }
 
 
       }
+
+
+	
+
+
+
 
     }
 
@@ -129,12 +136,15 @@ public class Driver {
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			System.out.println("Student Bno: ");
 			String Bno = br.readLine();
+			
 			CallableStatement stmt = conn.prepareCall("BEGIN student_registration.del_student(?,?); END;");
 			stmt.setString(1,Bno);
 			stmt.registerOutParameter(2, java.sql.Types.VARCHAR);
 			stmt.execute();
+			
 			String err_msg = ((OracleCallableStatement)stmt).getString(2);
-		      if(err_msg == null){
+		      	
+			if(err_msg == null){
 		    	  System.out.println("\nStudent deleted successfully.");
 		      }
 		      else{
@@ -161,28 +171,31 @@ public class Driver {
  			String Bno = br.readLine();
  			System.out.println("Enter Class ID: ");
  			String classid = br.readLine();
- 			CallableStatement stmt = conn.prepareCall("BEGIN student_registration.drop_student(?,?,?); END;");
+ 			
+			CallableStatement stmt = conn.prepareCall("BEGIN student_registration.drop_student(?,?,?); END;");
  			stmt.setString(1,Bno);
  			stmt.setString(2,classid);
  			stmt.registerOutParameter(3, java.sql.Types.VARCHAR);
  			stmt.execute();
 
-      String err_msg = ((OracleCallableStatement)stmt).getString(3);
-		      if(err_msg == null){
+      			String err_msg = ((OracleCallableStatement)stmt).getString(3);
+		        if(err_msg == null){
 		    	  System.out.println("\nStudent dropped from the course successfully.");
-		      }
-		      else{
+		        }
+		        else{
 		    	  System.out.println(err_msg);
-}
+		        }
 
-  stmt.close();
+  			stmt.close();
  		}
  		catch (Exception e)
  		{
  			e.printStackTrace();
  			System.exit(1);
  		}
- 	}
+ }
+
+
 
   public static void enrollStudentClass(Connection conn) {
 		try
@@ -192,21 +205,22 @@ public class Driver {
 			String Bno = br.readLine();
 			System.out.println("Enter Class ID: ");
 			String classid = br.readLine();
+		
 			CallableStatement stmt = conn.prepareCall("BEGIN student_registration.enroll_student(?,?,?); END;");
 			stmt.setString(1,Bno);
 			stmt.setString(2,classid);
-      stmt.registerOutParameter(3, java.sql.Types.VARCHAR);
-		  stmt.execute();
+		        stmt.registerOutParameter(3, java.sql.Types.VARCHAR);
+		        stmt.execute();
 
-		      String err_msg = ((OracleCallableStatement)stmt).getString(3);
-		      if(err_msg == null){
+		        String err_msg = ((OracleCallableStatement)stmt).getString(3);
+		        if(err_msg == null){
 		    	  System.out.println("\nStudent enrolled into course successfully.");
-		      }
-		      else{
+		        }
+		        else{
 		    	  System.out.println(err_msg);
-}
+                        }
 
- stmt.close();
+                        stmt.close();
 
 		}
 		catch (Exception e)
@@ -216,54 +230,74 @@ public class Driver {
 		}
 
 
-	}
+}
+
 
   public static void infoPrerequisites(Connection conn) {
 		try
 		{
+			
+			
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			System.out.println("Enter Dept Code: ");
 			String dept_code = br.readLine();
 			System.out.println("Enter Course No: ");
 			String course_no = br.readLine();
+                	
+			//String truncateTable = "TRUNCATE table temp_prerequisites";
+			//Statement stmt1 = conn.createStatement();
+			//stmt1.executeQuery(truncateTable);
+			//stmt1.close();
+			
 			CallableStatement stmt = conn.prepareCall("begin student_registration.get_prerequisites(?,?,?,?); end;");
-			stmt.setString(1,dept_code);
+			stmt.setString(1, dept_code);
 			stmt.setInt(2, Integer.parseInt(course_no));
-      stmt.registerOutParameter(3,java.sql.Types.VARCHAR);
+     		        stmt.registerOutParameter(3,java.sql.Types.VARCHAR);
 			stmt.registerOutParameter(4,OracleTypes.CURSOR);
+                       
+                  
 			stmt.execute();
 
 
-      ResultSet rs = null;
-  		      try{
-  		        rs = ((OracleCallableStatement)stmt).getCursor(4);
-  		      }
-  		      catch(Exception ex){
-  		        String err_msg = ((OracleCallableStatement)stmt).getString(3);
-  		        System.out.println(err_msg);
-  		      }
+			ResultSet rs = null;
+  		        try{
+  		        	rs = ((OracleCallableStatement)stmt).getCursor(4);
+  		        }
+  		        catch(Exception ex){
+  		        	String err_msg = ((OracleCallableStatement)stmt).getString(3);
+  		        	System.out.println(err_msg);
+  		        }
 
-  		      if(rs != null){
-  		    	  System.out.println("\n\nCOURSE");
-  		        while (rs.next()) {
-  		          System.out.println(rs.getString(1) + rs.getInt(2));        }
-  		      }
-  		      else
-  		      {
-  		        System.out.println("No rows returned.");
-  		      }
+  		      	if(rs != null){
+  		    		System.out.println("\n\nCOURSE");
+  		        	while (rs.next()) {
+  		          		System.out.println(rs.getString(1) + rs.getInt(2));        }
+  		      		}
+  		      	else
+  		      	{
+  		        	System.out.println("No rows returned.");
+  		      	}
 
-  		      if(rs != null)
-  		      rs.close();
+                        String truncateTable = "TRUNCATE table temp_prerequisites";	
 
-  stmt.close();
-}
+			Statement stmt1 = conn.createStatement();
+
+			stmt1.executeQuery(truncateTable);
+                       
+
+  		      //if(rs != null)
+  		      	//rs.close();
+
+  		      //stmt.close();
+		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			System.exit(1);
 		}
-	}
+}
+
+
 
   public static void infoTA(Connection conn)
 	{
@@ -272,34 +306,41 @@ public class Driver {
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			System.out.println("Enter classid: ");
 			String classid = br.readLine();
-			CallableStatement stmt = conn.prepareCall("begin student_registration.get_student_info(?,?,?); end;");
+			
+			CallableStatement stmt = conn.prepareCall("begin student_registration.ta_info(?,?,?); end;");
 			stmt.setString(1,classid);
 			stmt.registerOutParameter(2,java.sql.Types.VARCHAR);
 			stmt.registerOutParameter(3,OracleTypes.CURSOR);
 			stmt.execute();
 
-      ResultSet rs = null;
-		      try{
-		        rs = ((OracleCallableStatement)stmt).getCursor(2);
-		      }
-		      catch(Exception ex){
-		        String err_msg = ((OracleCallableStatement)stmt).getString(3);
-		        System.out.println(err_msg);
-		      }
+      			ResultSet rs = null;
+		      	
+			//ResultSet rs = ((OracleCallableStatement)stmt).getCursor(2);
 
-		      if(rs != null){
-		        while (rs.next()) {
-		          System.out.println(rs.getString(1) + "\t\t" + rs.getString(2) + "\t\t" + rs.getString(3));
-		        }
-		      }
-		      else
-		      {
-		        System.out.println("No rows returned.");
-		      }
+				
+			try{
+		        	rs = ((OracleCallableStatement)stmt).getCursor(3);
+                                //System.out.println("Cursor Found");
+		      	}
+		      	catch(Exception ex){
+		        	String err_msg = ((OracleCallableStatement)stmt).getString(2);
+		        	System.out.println(err_msg);
+		      	}
+			
 
-		      if(rs != null)
-		      rs.close();
-          stmt.close();
+		      	if(rs != null){
+		        	while (rs.next()) {
+		          	System.out.println(rs.getString(1) + "\t\t" + rs.getString(2) + "\t\t" + rs.getString(3));
+		        	}
+		      	}
+		      	else
+		      	{
+		        	System.out.println("No rows returned.");
+		      	}
+
+		      	if(rs != null)
+		      	rs.close();
+          		stmt.close();
 
 		}
 		catch (Exception e)
@@ -310,6 +351,18 @@ public class Driver {
 		}
 	}
 
+
+
+
+
+
+
+
+
+
+
+
+
   public static void showTableInfo(int choice, Connection conn)
 	{
 		switch(choice)
@@ -318,14 +371,29 @@ public class Driver {
 			{
 				try
 				{
-					CallableStatement stmt = conn.prepareCall("BEGIN student_registration.show_students(?); END;");
-					stmt.registerOutParameter(1, OracleTypes.CURSOR);
+				      CallableStatement stmt = conn.prepareCall("BEGIN student_registration.show_students(?); END;");
+				      stmt.registerOutParameter(1, OracleTypes.CURSOR);
 				      stmt.execute();
 				      ResultSet rs = ((OracleCallableStatement)stmt).getCursor(1);
-
+				      System.out.println("B#"+"\t\t\t"
+							+"FirstName"+"\t\t"
+							+"LastName"+"\t\t"
+							+"Status"+"\t\t\t"
+							+"GPA"+"\t\t"
+							+"Email"+"\t\t\t"
+							+"BirthDate"+"\t\t\t\t"
+							+"Dept_Name");
 				      while (rs.next())
 				      {
-				    	  System.out.format(rs.getString(1) + rs.getString(2) + rs.getString(3) + rs.getString(4) + rs.getDouble(5) + rs.getString(6) + rs.getString(7) + rs.getString(8));
+				    	  System.out.println(rs.getString(1) 
+								+"\t\t\t"+rs.getString(2)
+								+"\t\t\t"+rs.getString(3)
+								+"\t\t\t"+rs.getString(4)
+								+"\t\t\t"+rs.getDouble(5)
+								+"\t\t"+rs.getString(6)
+								+"\t\t"+rs.getString(7).substring(0,11)
+								+"\t\t\t"+rs.getString(8));
+
 				      }
 				      rs.close();
 				}
@@ -340,108 +408,128 @@ public class Driver {
 			{
 				try
 				{
-					CallableStatement stmt = conn.prepareCall("BEGIN student_registration.show_courses(?); END;");
-					stmt.registerOutParameter(1, OracleTypes.CURSOR); //REF CURSOR
+			              CallableStatement stmt = conn.prepareCall("BEGIN student_registration.show_courses(?); END;");
+				      stmt.registerOutParameter(1, OracleTypes.CURSOR); //REF CURSOR
 				      stmt.execute();
 				      ResultSet rs = ((OracleCallableStatement)stmt).getCursor(1);
 				      while (rs.next())
 				      {
-				    	  System.out.format("%-4s --> %-3d --> %-20s\n",rs.getString(1), rs.getInt(2),rs.getString(3));
+				    	  System.out.println(rs.getString(1)+"\t->\t"
+							+rs.getInt(2)+"\t->\t"
+							+rs.getString(3));
 				      }
 				      rs.close();
 				      stmt.close();
 				}
 				catch (SQLException e)
 				{
-					e.printStackTrace();
+					System.out.println("SQL Exception: "+e.toString());
 					System.exit(1);
 				}
 				break;
 			}
 
-      case 3:
-      {
-        try
-        {
-          CallableStatement stmt = conn.prepareCall("BEGIN student_registration.show_TAs(?); END;");
-          stmt.registerOutParameter(1, OracleTypes.CURSOR);
-              stmt.execute();
-              ResultSet rs = ((OracleCallableStatement)stmt).getCursor(1);
+      			case 3:
+      			{
+        			try
+        			{
+          				CallableStatement stmt = conn.prepareCall("BEGIN student_registration.show_TAs(?); END;");
+          				stmt.registerOutParameter(1, OracleTypes.CURSOR);
+              				stmt.execute();
+              				ResultSet rs = ((OracleCallableStatement)stmt).getCursor(1);
 
-              while (rs.next())
-              {
-                System.out.format(rs.getString(1) + rs.getString(2) + rs.getString(3));
-              }
-              rs.close();
-        }
-        catch (SQLException e)
-        {
-          e.printStackTrace();
-          System.exit(1);
-        }
-        break;
-      }
+              				while (rs.next())
+              				{
+                				System.out.println(rs.getString(1) + "\t" 
+								+ rs.getString(2) + "\t" 
+								+ rs.getString(3));
+              				}
+             				 rs.close();
+        			}
+        			catch (SQLException e)
+        			{
+          				//System.out.println("SQL Exception: "+e.toString());
+					System.out.println("SQL Exception: "+e.toString());
+          				System.exit(1);
+        			}
+        			break;
+      			}
+
 			case 4:
 			{
 				try
 				{
-					CallableStatement stmt = conn.prepareCall("BEGIN student_registration.show_classes(?); END;");
-					stmt.registerOutParameter(1, OracleTypes.CURSOR); //REF CURSOR
+				      CallableStatement stmt = conn.prepareCall("BEGIN student_registration.show_classes(?); END;");
+				      stmt.registerOutParameter(1, OracleTypes.CURSOR); //REF CURSOR
 				      stmt.execute();
 				      ResultSet rs = ((OracleCallableStatement)stmt).getCursor(1);
 				      while (rs.next())
 				      {
-				    	  System.out.format(rs.getString(1) + rs.getString(2) + rs.getInt(3) + rs.getInt(4) + rs.getInt(5) + rs.getString(6) + rs.getInt(7) + rs.getInt(8) + rs.getString(9) + rs.getString(10));
+				    	  System.out.println(rs.getString(1)+"\t\t" 
+							+ rs.getString(2)+"\t\t" 
+							+ rs.getInt(3)+"\t\t" 
+							+ rs.getInt(4)+"\t\t" 
+							+ rs.getInt(5)+"\t\t" 
+							+ rs.getString(6)+"\t\t" 
+							+ rs.getInt(7)+"\t\t"
+						 	+ rs.getInt(8)+"\t\t"
+							+ rs.getString(9)+"\t\t" 
+							+ rs.getString(10));
 				      }
 				      rs.close();
 				}
 				catch (SQLException e)
 				{
-					e.printStackTrace();
+                                        System.out.println("SQL Exception: "+e.toString());
 					System.exit(1);
 				}
 				break;
 			}
 
-      case 5:
-      {
-        try
-        {
-          CallableStatement stmt = conn.prepareCall("BEGIN student_registration.show_enrollments(?); END;");
-          stmt.registerOutParameter(1, OracleTypes.CURSOR);
-              stmt.execute();
-              ResultSet rs = ((OracleCallableStatement)stmt).getCursor(1);
-              while (rs.next())
-              {
-                System.out.format(rs.getString(1) + rs.getString(2) + rs.getString(3));
-              }
-              rs.close();
-        }
-        catch (SQLException e)
-        {
-          e.printStackTrace();
-          System.exit(1);
-        }
-        break;
-      }
+  			case 5:
+      			{
+        			try
+        			{
+          				CallableStatement stmt = conn.prepareCall("BEGIN student_registration.show_enrollments(?); END;");
+          				stmt.registerOutParameter(1, OracleTypes.CURSOR);
+              				stmt.execute();
+              				ResultSet rs = ((OracleCallableStatement)stmt).getCursor(1);
+              				while (rs.next())
+              				{
+                				System.out.println(rs.getString(1)+"\t\t" 
+								+ rs.getString(2)+"\t\t" 
+								+ rs.getString(3));
+              				}
+              				rs.close();
+        			}
+        			catch (SQLException e)
+        			{
+                                        System.out.println("SQL Exception: "+e.toString());
+          				System.exit(1);
+        			}
+        			break;
+      			}
 
 			case 6:
 			{
 				try
 				{
-					CallableStatement stmt = conn.prepareCall("BEGIN student_registration.show_prerequisites(?); END;");
-					stmt.registerOutParameter(1, OracleTypes.CURSOR); //REF CURSOR
+				      CallableStatement stmt = conn.prepareCall("BEGIN student_registration.show_prerequisites(?); END;");
+				      stmt.registerOutParameter(1, OracleTypes.CURSOR); //REF CURSOR
 				      stmt.execute();
 				      ResultSet rs = ((OracleCallableStatement)stmt).getCursor(1);
 				      while (rs.next())
 				      {
-				    	  System.out.format(rs.getString(1), rs.getInt(2), rs.getString(3),rs.getInt(4));
+				    	  System.out.println(rs.getString(1)+"\t\t" 
+							+ rs.getInt(2)+"\t\t"
+							+ rs.getString(3)+"\t\t"
+							+ rs.getInt(4));
 				      }
 				      rs.close();
 				}
 				catch (SQLException e)
 				{
-					e.printStackTrace();
+                                        System.out.println("SQL Exception: "+e.toString());
 					System.exit(1);
 				}
 				break;
@@ -451,24 +539,29 @@ public class Driver {
 			{
 				try
 				{
-					CallableStatement stmt = conn.prepareCall("BEGIN databaseproject.show_logs(?); END;");
+					CallableStatement stmt = conn.prepareCall("BEGIN student_registration.show_logs(?); END;");
 					stmt.registerOutParameter(1, OracleTypes.CURSOR); //REF CURSOR
 				      stmt.execute();
 				      ResultSet rs = ((OracleCallableStatement)stmt).getCursor(1);
 				      while (rs.next())
 				      {
-				    	  System.out.format(rs.getInt(1) + rs.getString(2) + rs.getString(3) + rs.getString(4) + rs.getString(5) + rs.getString(6));
+				    	  System.out.println(rs.getInt(1)+"\t\t"
+							+ rs.getString(2)+"\t\t"
+							+ rs.getString(3)+"\t\t"  
+							+ rs.getString(4)+"\t\t" 
+							+ rs.getString(5)+"\t\t"
+							+ rs.getString(6));
 				      }
 				      rs.close();
 				}
 				catch (SQLException e)
 				{
-					e.printStackTrace();
+                                        System.out.println("SQL Exception: "+e.toString());
 					System.exit(1);
 				}
 				break;
 			}
 		}
 	}
-
 }
+

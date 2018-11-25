@@ -9,7 +9,9 @@ Drop trigger student_delete;
 --Done by: Varun Saxena
 DROP SEQUENCE logs_seq;
 CREATE SEQUENCE logs_seq
+increment by 1
 START WITH 100;
+
 
 --Package Started
 Create or replace package student_registration AS
@@ -237,7 +239,11 @@ create or replace package body student_registration AS
       error_message := 'Cannot enroll into a class from a previous semester';
     elsif (v_capacity = 0) then
       error_message := 'The class is already full';
+<<<<<<< HEAD:package.sql
     elsif (v_student_in_sem != 0) then
+=======
+    elsif (v_student_in_sem <> 0) then
+>>>>>>> d49a0baa3d2385a740de1e584db3dde5baa9e751:package1.sql
       error_message := 'The student is already in the class';
     elsif (v_count_prereqs <> v_count_classid_prereqs) then
       error_message := 'Prerequisite not satisfied';
@@ -252,6 +258,7 @@ create or replace package body student_registration AS
       INSERT into Enrollments(B#,classid) VALUES (v_B#,v_classid);
     end if;
   end;
+
 
   --Q.6.
   --Done by: Sean Gallagher
@@ -320,6 +327,8 @@ create or replace package body student_registration AS
 	      END IF;
     END IF;
   END;
+
+
 
   --Q.7.
   --Done by: Sean Gallagher
@@ -416,6 +425,6 @@ show errors;
   DELETE FROM Enrollments WHERE B# = B#_log;
   UPDATE Classes SET TA_B# = NULL WHERE TA_B# = B#_log;
   DELETE FROM TAs WHERE B# = B#_log;
-
  END;
  /
+show errors;
