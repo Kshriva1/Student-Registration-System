@@ -14,6 +14,8 @@ BEGIN
   Insert into logs
   values(id_log,user_log,sysdate,table_name_log,operation_log,B#_log);
   DELETE FROM Enrollments WHERE B# = B#_log;
+  DELETE FROM TAs WHERE B# = B#_log;
+  UPDATE Classes SET TA_B# = NULL WHERE TA_B# = B#_log;
 END;
 /
 show errors;
