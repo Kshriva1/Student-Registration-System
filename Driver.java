@@ -407,7 +407,7 @@ public class Driver {
       {
         try
         {
-          CallableStatement stmt = conn.prepareCall("BEGIN databaseproject.show_enrollments(?); END;");
+          CallableStatement stmt = conn.prepareCall("BEGIN student_registration.show_enrollments(?); END;");
           stmt.registerOutParameter(1, OracleTypes.CURSOR);
               stmt.execute();
               ResultSet rs = ((OracleCallableStatement)stmt).getCursor(1);

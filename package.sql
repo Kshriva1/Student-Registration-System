@@ -233,11 +233,11 @@ create or replace package body student_registration AS
       error_message := 'The B# is invalid';
     elsif (v_student_classid = 0) then
       error_message := 'The classid is invalid';
-    elsif (v_class_sem > 0) then
+    elsif (v_class_sem = 0) then
       error_message := 'Cannot enroll into a class from a previous semester';
     elsif (v_capacity = 0) then
       error_message := 'The class is already full';
-    elsif (v_student_in_sem = 0) then
+    elsif (v_student_in_sem != 0) then
       error_message := 'The student is already in the class';
     elsif (v_count_prereqs <> v_count_classid_prereqs) then
       error_message := 'Prerequisite not satisfied';
@@ -414,5 +414,8 @@ show errors;
   Insert into logs
   values(id_log,user_log,sysdate,table_name_log,operation_log,B#_log);
   DELETE FROM Enrollments WHERE B# = B#_log;
+  UPDATE Classes SET TA_B# = NULL WHERE TA_B# = B#_log;
+  DELETE FROM TAs WHERE B# = B#_log;
+
  END;
  /
