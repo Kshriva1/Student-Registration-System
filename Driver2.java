@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.CallableStatement;
@@ -18,7 +19,7 @@ public class Driver {
       OracleDataSource ds = new oracle.jdbc.pool.OracleDataSource();
       ds.setURL("jdbc:oracle:thin:@castor.cc.binghamton.edu:1521:ACAD111");
       Connection conn = ds.getConnection("kshriva1","Ilovefcrit1");
-      System.out.println("Connection Establish");
+      
 
       while(true)
       {
@@ -64,7 +65,7 @@ public class Driver {
 			      }while(m < 1 || m > 7);
 	        }
 	        catch (Exception e) {
-		      System.out.println("Choice Exception: "+e.toString());
+		      e.printStackTrace();
 		      System.exit(1);
                 }
                 showTableInfo(m,conn);
@@ -113,11 +114,6 @@ public class Driver {
 
 
       }
-
-
-	
-
-
 
 
     }
@@ -273,10 +269,8 @@ public class Driver {
   		        	while (rs.next()) {
   		          		System.out.println(rs.getString(1) + rs.getInt(2));        }
   		      		}
-  		      	else
-  		      	{
-  		        	System.out.println("No rows returned.");
-}
+  		      	
+
   		      	
 
                         String TruncateTable = "Truncate table temp_prerequisites";	
@@ -288,7 +282,7 @@ public class Driver {
 
   	
 		}
-		catch (Exception e)
+		catch(Exception e)
 		{
 			e.printStackTrace();
 			System.exit(1);
@@ -313,12 +307,11 @@ public class Driver {
 
       			ResultSet rs = null;
 		      	
-			//ResultSet rs = ((OracleCallableStatement)stmt).getCursor(2);
 
 				
 			try{
 		        	rs = ((OracleCallableStatement)stmt).getCursor(3);
-                                //System.out.println("Cursor Found");
+                              
 		      	}
 		      	catch(Exception ex){
 		        	String err_msg = ((OracleCallableStatement)stmt).getString(2);
@@ -328,36 +321,21 @@ public class Driver {
 
 		      	if(rs != null){
 		        	while (rs.next()) {
-		          	System.out.println(rs.getString(1) + "\t\t" + rs.getString(2) + "\t\t" + rs.getString(3));
+		          	System.out.println(rs.getString(1) + "\t" + rs.getString(2) + "\t" + rs.getString(3));
 		        	}
 		      	}
-		      	else
-		      	{
-		        	System.out.println("No rows returned.");
-		      	}
+		    
 
-		      	if(rs != null)
-		      	rs.close();
-          		stmt.close();
+		     
 
 		}
-		catch (Exception e)
+		catch(Exception e)
 		{
-			System.err.println("Exception in get Student Info.");
+			
 			e.printStackTrace();
 			System.exit(1);
 		}
 	}
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -384,7 +362,7 @@ public class Driver {
 				      }
 				      rs.close();
 				}
-				catch (SQLException e)
+				catch (Exception e)
 				{
 					e.printStackTrace();
 					System.exit(1);
@@ -405,12 +383,12 @@ public class Driver {
 							+rs.getInt(2)+"\t"
 							+rs.getString(3));
 				      }
-				      rs.close();
-				      stmt.close();
+                                      rs.close();
+				     
 				}
-				catch (SQLException e)
+				catch (Exception e)
 				{
-					System.out.println("SQL Exception: "+e.toString());
+					e.printStackTrace();
 					System.exit(1);
 				}
 				break;
@@ -433,10 +411,10 @@ public class Driver {
               				}
              				 rs.close();
         			}
-        			catch (SQLException e)
+        			catch (Exception e)
         			{
-          				//System.out.println("SQL Exception: "+e.toString());
-					System.out.println("SQL Exception: "+e.toString());
+          				
+					e.printStackTrace();
           				System.exit(1);
         			}
         			break;
@@ -465,9 +443,9 @@ public class Driver {
 				      }
 				      rs.close();
 				}
-				catch (SQLException e)
+				catch (Exception e)
 				{
-                                        System.out.println("SQL Exception: "+e.toString());
+                                        e.printStackTrace();
 					System.exit(1);
 				}
 				break;
@@ -489,9 +467,9 @@ public class Driver {
               				}
               				rs.close();
         			}
-        			catch (SQLException e)
+        			catch (Exception e)
         			{
-                                        System.out.println("SQL Exception: "+e.toString());
+                                        e.printStackTrace();
           				System.exit(1);
         			}
         			break;
@@ -514,9 +492,9 @@ public class Driver {
 				      }
 				      rs.close();
 				}
-				catch (SQLException e)
+				catch (Exception e)
 				{
-                                        System.out.println("SQL Exception: "+e.toString());
+                                        e.printStackTrace();
 					System.exit(1);
 				}
 				break;
@@ -541,9 +519,9 @@ public class Driver {
 				      }
 				      rs.close();
 				}
-				catch (SQLException e)
+				catch (Exception e)
 				{
-                                        System.out.println("SQL Exception: "+e.toString());
+                                        e.printStackTrace();
 					System.exit(1);
 				}
 				break;

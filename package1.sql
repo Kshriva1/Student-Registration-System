@@ -172,7 +172,7 @@ create or replace package body student_registration AS
       SELECT count(*) into v_found_dept_code_course# FROM Courses WHERE
       dept_code = v_dept_code and course# = v_course#;
       if (v_found_dept_code_course# = 0) THEN
-          error_message := v_dept_code||','||v_course#||' is invalid';
+          error_message := v_dept_code||v_course#||' is invalid';
 
 
       else
@@ -235,7 +235,7 @@ create or replace package body student_registration AS
       error_message := 'The B# is invalid';
     elsif (v_student_classid = 0) then
       error_message := 'The classid is invalid';
-    elsif (v_class_sem > 0) then
+    elsif (v_class_sem = 0) then
       error_message := 'Cannot enroll into a class from a previous semester';
     elsif (v_capacity = 0) then
       error_message := 'The class is already full';
@@ -419,6 +419,8 @@ show errors;
   Insert into logs
   values(id_log,user_log,sysdate,table_name_log,operation_log,B#_log);
   Delete From Enrollments Where B# = B#_log;
+  UPDATE Classes SET TA_B# = NULL WHERE TA_B# = B#_log;
+  DELETE FROM TAs WHERE B# = B#_log;
  END;
  /
 show errors;
