@@ -244,7 +244,10 @@ public class Driver {
 			System.out.println("Enter Course No: ");
 			String course_no = br.readLine();
                 	
-
+			//String truncateTable = "TRUNCATE table temp_prerequisites";
+			//Statement stmt1 = conn.createStatement();
+			//stmt1.executeQuery(truncateTable);
+			//stmt1.close();
 			
 			CallableStatement stmt = conn.prepareCall("begin student_registration.get_prerequisites(?,?,?,?); end;");
 			stmt.setString(1, dept_code);
@@ -257,9 +260,6 @@ public class Driver {
 
 
 			ResultSet rs = null;
-                       
-  		         
-  		  
   		        try{
   		        	rs = ((OracleCallableStatement)stmt).getCursor(4);
   		        }
@@ -276,17 +276,19 @@ public class Driver {
   		      	else
   		      	{
   		        	System.out.println("No rows returned.");
-}
-  		      	
+  		      	}
 
-                        String TruncateTable = "Truncate table temp_prerequisites";	
+                        String truncateTable = "TRUNCATE table temp_prerequisites";	
 
 			Statement stmt1 = conn.createStatement();
 
-			stmt1.executeQuery(TruncateTable);
+			stmt1.executeQuery(truncateTable);
                        
 
-  	
+  		      //if(rs != null)
+  		      	//rs.close();
+
+  		      //stmt.close();
 		}
 		catch (Exception e)
 		{
@@ -373,13 +375,24 @@ public class Driver {
 				      stmt.registerOutParameter(1, OracleTypes.CURSOR);
 				      stmt.execute();
 				      ResultSet rs = ((OracleCallableStatement)stmt).getCursor(1);
-				    
+				      System.out.println("B#"+"\t\t\t"
+							+"FirstName"+"\t\t"
+							+"LastName"+"\t\t"
+							+"Status"+"\t\t\t"
+							+"GPA"+"\t\t"
+							+"Email"+"\t\t\t"
+							+"BirthDate"+"\t\t\t\t"
+							+"Dept_Name");
 				      while (rs.next())
 				      {
-				  
-
-
- System.out.format("%-4s %-15s %-15s %-10s %.2f %-20s %-15s %-6s\n",rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getDouble(5),rs.getString(6),rs.getString(7).substring(0,11),rs.getString(8));
+				    	  System.out.println(rs.getString(1) 
+								+"\t\t\t"+rs.getString(2)
+								+"\t\t\t"+rs.getString(3)
+								+"\t\t\t"+rs.getString(4)
+								+"\t\t\t"+rs.getDouble(5)
+								+"\t\t"+rs.getString(6)
+								+"\t\t"+rs.getString(7).substring(0,11)
+								+"\t\t\t"+rs.getString(8));
 
 				      }
 				      rs.close();
@@ -401,8 +414,8 @@ public class Driver {
 				      ResultSet rs = ((OracleCallableStatement)stmt).getCursor(1);
 				      while (rs.next())
 				      {
-				    	  System.out.println(rs.getString(1)+"\t"
-							+rs.getInt(2)+"\t"
+				    	  System.out.println(rs.getString(1)+"\t->\t"
+							+rs.getInt(2)+"\t->\t"
 							+rs.getString(3));
 				      }
 				      rs.close();
@@ -452,15 +465,15 @@ public class Driver {
 				      ResultSet rs = ((OracleCallableStatement)stmt).getCursor(1);
 				      while (rs.next())
 				      {
-				    	  System.out.println(rs.getString(1)+"\t" 
-							+ rs.getString(2)+"\t" 
-							+ rs.getInt(3)+"\t" 
-							+ rs.getInt(4)+"\t" 
-							+ rs.getInt(5)+"\t" 
-							+ rs.getString(6)+"\t" 
-							+ rs.getInt(7)+"\t"
-						 	+ rs.getInt(8)+"\t"
-							+ rs.getString(9)+"\t" 
+				    	  System.out.println(rs.getString(1)+"\t\t" 
+							+ rs.getString(2)+"\t\t" 
+							+ rs.getInt(3)+"\t\t" 
+							+ rs.getInt(4)+"\t\t" 
+							+ rs.getInt(5)+"\t\t" 
+							+ rs.getString(6)+"\t\t" 
+							+ rs.getInt(7)+"\t\t"
+						 	+ rs.getInt(8)+"\t\t"
+							+ rs.getString(9)+"\t\t" 
 							+ rs.getString(10));
 				      }
 				      rs.close();
@@ -483,8 +496,8 @@ public class Driver {
               				ResultSet rs = ((OracleCallableStatement)stmt).getCursor(1);
               				while (rs.next())
               				{
-                				System.out.println(rs.getString(1)+"\t" 
-								+ rs.getString(2)+"\t" 
+                				System.out.println(rs.getString(1)+"\t\t" 
+								+ rs.getString(2)+"\t\t" 
 								+ rs.getString(3));
               				}
               				rs.close();
@@ -507,9 +520,9 @@ public class Driver {
 				      ResultSet rs = ((OracleCallableStatement)stmt).getCursor(1);
 				      while (rs.next())
 				      {
-				    	  System.out.println(rs.getString(1)+"\t" 
-							+ rs.getInt(2)+"\t"
-							+ rs.getString(3)+"\t"
+				    	  System.out.println(rs.getString(1)+"\t\t" 
+							+ rs.getInt(2)+"\t\t"
+							+ rs.getString(3)+"\t\t"
 							+ rs.getInt(4));
 				      }
 				      rs.close();
@@ -532,11 +545,11 @@ public class Driver {
 				      ResultSet rs = ((OracleCallableStatement)stmt).getCursor(1);
 				      while (rs.next())
 				      {
-				    	  System.out.println(rs.getInt(1)+"\t"
-							+ rs.getString(2)+"\t"
-							+ rs.getString(3)+"\t"  
-							+ rs.getString(4)+"\t" 
-							+ rs.getString(5)+"\t"
+				    	  System.out.println(rs.getInt(1)+"\t\t"
+							+ rs.getString(2)+"\t\t"
+							+ rs.getString(3)+"\t\t"  
+							+ rs.getString(4)+"\t\t" 
+							+ rs.getString(5)+"\t\t"
 							+ rs.getString(6));
 				      }
 				      rs.close();
