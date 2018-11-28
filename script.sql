@@ -1,11 +1,12 @@
+drop table prerequisites;
+drop table logs;
 drop table enrollments;
 drop table classes;
 drop table tas;
 drop table course_credit;
 drop table courses;
 drop table students;
-drop table prerequisites;
-drop table logs;
+
 
 create table students (B# char(4) primary key check (B# like 'B%'),
 first_name varchar2(15) not null, last_name varchar2(15) not null, status varchar2(10) 
