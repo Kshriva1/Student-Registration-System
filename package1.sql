@@ -3,6 +3,8 @@ set serveroutput on;
 Drop trigger enrollments_insert;
 Drop trigger enrollments_delete;
 Drop trigger student_delete;
+Drop table temp_prerequisites;
+Create table temp_prerequisites(dept_code varchar2(4) not null,course# number(3) not null);
 
 --Q.1.
 --Sequence
@@ -165,17 +167,22 @@ create or replace package body student_registration AS
   select pre_dept_code,pre_course# from prerequisites
   where dept_code = v_dept_code
   and course# = v_course#;
+  v_found_prereq Number;
 
   prereq_record prereq_cursor%rowtype;
 
   BEGIN
       SELECT count(*) into v_found_dept_code_course# FROM Courses WHERE
       dept_code = v_dept_code and course# = v_course#;
+      SELECT count(*) into v_found_prereq FROM Prerequisites WHERE dept_code = v_dept_code and course# = v_course#;
       if (v_found_dept_code_course# = 0) THEN
-          error_message := v_dept_code||v_course#||' is invalid';
-
-
+          error_message := v_dept_code||v_course#||' does not exist';
       else
+         if (v_found_prereq = 0) THEN
+           error_message:= v_dept_code||v_course#||' does not exist';
+
+
+         else
         insert into temp_prerequisites select pre_dept_code,pre_course# from
         prerequisites where dept_code = v_dept_code and course# =
         v_course#;
@@ -189,6 +196,7 @@ create or replace package body student_registration AS
       open r_cursor for select * from temp_prerequisites;
       close prereq_cursor;
     end if;
+   end if;
   end;
 
 
@@ -350,8 +358,8 @@ END;
 /
 show errors;
 
- --Trigger
- --Created by: Kundan Shrivastav
+ --Triggers
+ --Done by: Kundan Shrivastav
 
  create or replace trigger enrollments_insert
  after insert on enrollments
