@@ -1,4 +1,4 @@
-Course: - CS532 DataBase Systems Semester: - Fall 2016
+Course: - CS532 DataBase Systems Semester: - Fall 2018
 
 Final Project README FILE
 
