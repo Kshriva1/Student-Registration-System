@@ -1,6 +1,30 @@
-An application which uses Oracle PL/SQL and JDBC to support typical student registration tasks in an university.
-Used Oracle PL/SQL code for stored procedures which perform functionalities such as displaying the data of all relations, displaying direct and indirect data using recursion, storing the data in the database and deleting the data in the database.
-Used Oracle PL/SQL to create Triggers which update the data in the database.
-Made an Interactive and menu driven interface using Java and JDBC which is used for performing the operations in the PL/SQL code.
+Course: - CS532 DataBase Systems Semester: - Fall 2016
 
-The final code and all the documentations are available in the final_demo folder.
+Final Project README FILE
+
+Team Authors: Kundan Shrivastav, Varun Saxena, Sean Gallagher
+
+Email: kshriva1@binghamton.edu, vsaxena1@binghamton.edu, sgallagher924@binghamton.edu
+
+PURPOSE:
+
+Develop database application using JDBC connectivity to Java and executing stored procedures and triggers.
+
+FILES:
+
+The folder Final_Demo consists of all the files required to run the project.
+
+We have a team report and individual project reports.
+
+First load the pl/sql package in our database. 
+
+We need the data from the script provided in the folder.
+
+Run the Driver.java program which connects to our database.
+
+Please enter the username and password of your database in Driver.java.
+
+
+
+
+
